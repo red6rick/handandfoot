@@ -11,13 +11,12 @@ $(document).ready(function(){
 	}
 
 	$('input' ).change(function() {
-		// detect when an input was changed. 
-
-			// make sure input had class number_input
-	
-	
-			var rowIndex = $(this).parent().parent().index() + 1;
-			var num = $(this).val();
+			var $this = $(this); // jquery best practice for avoiding $this vs $(this) conflation (due to .each function below) 
+			var $table = $this.parent().parent().parent();
+			console.log('table:'+$table.html());	
+			var $row =	$this.parent().parent();
+			var rowIndex = $row.index() + 1;
+			var num = $this.val();
 			console.log('ind:'+rowIndex);	
 			var multiplier = $('#tab4 table tr:nth-child('+rowIndex+')').find('input').val();
 		
@@ -26,8 +25,28 @@ $(document).ready(function(){
 
 			console.log('row:'+rowIndex+', num:'+num+', mult:'+multiplier);
 		
+		
 			// finally put the result into the element next to the element clicked
-			$(this).parent().parent().find('.output').text((multiplier * num));
+			$table.find('.output').text((multiplier * num));
+
+			// sum
+			var sum1 = 0;
+			var sum2 = 0;
+			
+			$table.find('input').each(function(){
+				var val = parseInt($(this).val()); // different "this"
+				if (!isNaN(val)) sum1 += val
+			});		
+			$table.find('.output').each(function(){
+				var val = parseInt($(this).text());
+				if (!isNaN(val)) sum2 += val
+				
+			});		
+			$table.find('.sum1').text(sum1);
+			$table.find('.sum2').text(sum2);	
+		
+			console.log('sum 1:'+sum1);
+			
 	});
 
 	ShowTab(0);
